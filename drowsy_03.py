@@ -14,22 +14,24 @@ eye = {'left':
        {'coordinates': [33, 246, 161, 160, 159, 158, 157, 173, 133, 155, 154, 153, 145, 144, 163, 7],
         'values': {'x': [], 'y': []}}}
 iris = {'left': 
-       {'coordinates': [473, 474, 475, 476, 477],
+       {'coordinates': [474, 475, 476, 477],
         'values': {'x': [], 'y': []}},
        'right': 
-       {'coordinates': [468, 469, 470, 471, 472],
+       {'coordinates': [469, 470, 471, 472],
         'values': {'x': [], 'y': []}}}
 
 left_corners = [362, 263]
 right_corners = [33, 133]
 
+# Opencv Parameters
 radius = 2
 color = (0, 255, 0)
 thickness = 1
+font = cv2.FONT_HERSHEY_SIMPLEX
 
 # For webcam input:
 drawing_spec = mp_drawing.DrawingSpec(thickness=1, circle_radius=1)
-cap = cv2.VideoCapture(1)
+cap = cv2.VideoCapture(0)
 with mp_face_mesh.FaceMesh(
     max_num_faces=1,
     refine_landmarks=True,
@@ -74,22 +76,33 @@ with mp_face_mesh.FaceMesh(
         eye['right']['values']['x'].append(face_landmarks.landmark[each_point].x)
         eye['right']['values']['y'].append(face_landmarks.landmark[each_point].y)
 
+      iris['left']['values']['x'] = [] 
+      iris['left']['values']['y'] = [] 
+      iris['right']['values']['x'] = [] 
+      iris['right']['values']['y'] = [] 
+      for each_point in iris['left']['coordinates']:
+        iris['left']['values']['x'].append(face_landmarks.landmark[each_point].x)
+        iris['left']['values']['y'].append(face_landmarks.landmark[each_point].y)
+      for each_point in iris['right']['coordinates']:
+        iris['right']['values']['x'].append(face_landmarks.landmark[each_point].x)
+        iris['right']['values']['y'].append(face_landmarks.landmark[each_point].y)
+
         
       
     eye_left_area = Polygon(zip(eye['left']['values']['x'],eye['left']['values']['y'])).area
     eye_right_area = Polygon(zip(eye['right']['values']['x'],eye['right']['values']['y'])).area
 
-    distance_left = dist = np.sqrt(np.sum(np.square(
-      np.array((face_landmarks.landmark[left_corners[0]].x, face_landmarks.landmark[left_corners[0]].y, face_landmarks.landmark[left_corners[0]].z))-
-      np.array((face_landmarks.landmark[left_corners[1]].x, face_landmarks.landmark[left_corners[1]].y, face_landmarks.landmark[left_corners[1]].z))
-      )))
-    distance_right = dist = np.sqrt(np.sum(np.square(
-      np.array((face_landmarks.landmark[right_corners[0]].x, face_landmarks.landmark[right_corners[0]].y, face_landmarks.landmark[right_corners[0]].z))-
-      np.array((face_landmarks.landmark[right_corners[1]].x, face_landmarks.landmark[right_corners[1]].y, face_landmarks.landmark[right_corners[1]].z))
-      )))
+    iris_left_area = Polygon(zip(iris['left']['values']['x'],iris['left']['values']['y'])).area
+    iris_right_area = Polygon(zip(iris['right']['values']['x'],iris['right']['values']['y'])).area
+
     
-    eye_left_area_norm = eye_left_area / distance_left
-    eye_right_area_norm = eye_right_area / distance_right
+    
+    eye_left_area_norm = eye_left_area / iris_left_area
+    eye_right_area_norm = eye_right_area / iris_right_area
+
+    
+    if eye_left_area_norm<=1.6 or eye_right_area_norm<=1.6:
+      cv2.putText(image, 'Drowsy Detected', (50,100), font, 2, (0, 255, 0), 2, cv2.LINE_AA)
 
     print(f'Left Eye Area: {eye_left_area_norm}, Right Eye Area: {eye_right_area_norm}')
     cv2.imshow('MediaPipe Face Mesh', cv2.flip(image, 1))   
