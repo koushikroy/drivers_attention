@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" width="900" height="360" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+  <rect width="900" height="360" rx="14" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Pipeline -->
+  <g font-size="14" text-anchor="middle">
+    <g>
+      <rect x="20" y="30" width="150" height="62" rx="10" fill="#eef2ff" stroke="#6366f1"/>
+      <text x="95" y="57" font-weight="600" fill="#1e1b4b">Video frame</text>
+      <text x="95" y="77" font-size="12" fill="#475569">webcam or file</text>
+    </g>
+    <g>
+      <rect x="200" y="30" width="170" height="62" rx="10" fill="#eef2ff" stroke="#6366f1"/>
+      <text x="285" y="57" font-weight="600" fill="#1e1b4b">Face Landmarker</text>
+      <text x="285" y="77" font-size="12" fill="#475569">478 points incl. irises</text>
+    </g>
+    <g>
+      <rect x="400" y="30" width="150" height="62" rx="10" fill="#eef2ff" stroke="#6366f1"/>
+      <text x="475" y="57" font-weight="600" fill="#1e1b4b">Openness ratio</text>
+      <text x="475" y="77" font-size="12" fill="#475569">eye area ÷ iris area</text>
+    </g>
+    <g>
+      <rect x="580" y="30" width="140" height="62" rx="10" fill="#eef2ff" stroke="#6366f1"/>
+      <text x="650" y="57" font-weight="600" fill="#1e1b4b">Timer</text>
+      <text x="650" y="77" font-size="12" fill="#475569">closed ≥ 1.5 s?</text>
+    </g>
+    <g>
+      <rect x="750" y="30" width="130" height="62" rx="10" fill="#fef2f2" stroke="#ef4444"/>
+      <text x="815" y="57" font-weight="600" fill="#7f1d1d">Alarm</text>
+      <text x="815" y="77" font-size="12" fill="#475569">sound + banner</text>
+    </g>
+  </g>
+  <g stroke="#64748b" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="170" y1="61" x2="198" y2="61"/>
+    <line x1="370" y1="61" x2="398" y2="61"/>
+    <line x1="550" y1="61" x2="578" y2="61"/>
+    <line x1="720" y1="61" x2="748" y2="61"/>
+  </g>
+
+  <!-- Open eye -->
+  <g transform="translate(150,215)">
+    <path d="M-110,0 Q0,-80 110,0 Q0,70 -110,0 z" fill="#f8fafc" stroke="#16a34a" stroke-width="3"/>
+    <circle cx="0" cy="0" r="34" fill="#bae6fd" stroke="#0891b2" stroke-width="3"/>
+    <circle cx="0" cy="0" r="12" fill="#0f172a"/>
+    <g fill="#16a34a">
+      <circle cx="-110" cy="0" r="4"/><circle cx="-73" cy="-22" r="4"/><circle cx="-37" cy="-36" r="4"/><circle cx="0" cy="-40" r="4"/>
+      <circle cx="37" cy="-36" r="4"/><circle cx="73" cy="-22" r="4"/><circle cx="110" cy="0" r="4"/>
+      <circle cx="73" cy="20" r="4"/><circle cx="37" cy="31" r="4"/><circle cx="0" cy="35" r="4"/><circle cx="-37" cy="31" r="4"/><circle cx="-73" cy="20" r="4"/>
+    </g>
+    <text x="0" y="90" text-anchor="middle" font-size="15" font-weight="600" fill="#166534">Open: ratio ≈ 1.5</text>
+  </g>
+
+  <!-- Closed eye -->
+  <g transform="translate(450,215)">
+    <path d="M-110,0 Q0,-14 110,0 Q0,12 -110,0 z" fill="#f8fafc" stroke="#dc2626" stroke-width="3"/>
+    <circle cx="0" cy="0" r="34" fill="none" stroke="#0891b2" stroke-width="2" stroke-dasharray="5 4"/>
+    <text x="0" y="90" text-anchor="middle" font-size="15" font-weight="600" fill="#991b1b">Closed: ratio → 0</text>
+    <text x="0" y="-48" text-anchor="middle" font-size="12" fill="#475569">iris still estimated by the model</text>
+  </g>
+
+  <!-- Formula -->
+  <g transform="translate(640,150)" font-size="14" fill="#0f172a">
+    <text x="0" y="0" font-weight="600">Why divide by the iris?</text>
+    <text x="0" y="26" fill="#334155">The iris is ~11.7 mm for almost</text>
+    <text x="0" y="46" fill="#334155">everyone, so the ratio does not</text>
+    <text x="0" y="66" fill="#334155">change when the driver leans</text>
+    <text x="0" y="86" fill="#334155">towards or away from the camera.</text>
+    <text x="0" y="122" font-weight="600">Area: shoelace formula</text>
+    <text x="0" y="146" font-family="Consolas, Menlo, monospace" font-size="13" fill="#334155">A = ½ |Σ (xᵢ·yᵢ₊₁ − xᵢ₊₁·yᵢ)|</text>
+  </g>
+</svg>

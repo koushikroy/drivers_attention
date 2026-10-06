@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drowsiness-detector"
+dynamic = ["version"]
+description = "Real-time driver drowsiness detection from a webcam using MediaPipe face landmarks."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Koushik Roy" }]
+keywords = ["computer-vision", "drowsiness-detection", "mediapipe", "opencv", "driver-safety"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Image Recognition",
+]
+dependencies = [
+    "mediapipe>=0.10.14,<2",
+    "numpy>=1.24",
+    "opencv-contrib-python>=4.8",  # same OpenCV build MediaPipe depends on
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6", "pre-commit>=3"]
+
+[project.scripts]
+drowsiness-detector = "drowsiness_detector.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/koushikroy/drivers_attention"
+Issues = "https://github.com/koushikroy/drivers_attention/issues"
+
+[tool.setuptools.dynamic]
+version = { attr = "drowsiness_detector.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+markers = ["integration: needs the MediaPipe model (downloaded on first run)"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "N", "RUF"]
